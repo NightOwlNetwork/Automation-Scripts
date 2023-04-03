@@ -26,3 +26,4 @@ foreach ($user in $users) {
     }
     New-ADUser @props -PassThru
 }
+#end
