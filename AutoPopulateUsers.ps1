@@ -15,7 +15,7 @@ $pswrd = ConvertTo-SecureString $UserPassword -AsPlainText -Force
 $users = Import-CSV $Filepath
 foreach ($user in $users) {
     $props = @{
-        Name = $User.Username + '\' + $User.LastName + $User.FirstName
+        $User.FirstName + ' ' + $User.LastName
         DisplayName = $User.LastName + ' ' + $User.FirstName
         EmailAddress = $User.Username + '@cleanpower.com'
         Surname = $User.LastName
