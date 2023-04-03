@@ -6,12 +6,16 @@
 # This code can be ran upon termination of an employee. 
 
 # Retrieve the user
+
 Get-ADUser $SamAccountName
 
 # Prompt to delete the user
+
 $DeleteUser = Read-Host "Do you want to delete the user? (Yes/No)"
 if ($DeleteUser -eq "Yes") {
+
     # Delete the user
+    
     Remove-ADUser -Identity $SamAccountName -Confirm:$false
     Write-Host "User account $SamAccountName has been deleted."
 } else {
