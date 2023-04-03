@@ -12,8 +12,11 @@ Param (
 # Filepath
 $Filepath = "C:\Users\Administrator\Documents\Clean-Power.csv"
 
+# Var
 $pswrd = ConvertTo-SecureString $UserPassword -AsPlainText -Force
 $users = Import-CSV $Filepath
+
+# Goes to CSV file and locates the Data then runs the NewADUser for each person
 foreach ($user in $users) {
     $props = @{
         Name = $User.Username + '\' + $User.LastName + $User.FirstName
