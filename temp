@@ -5,10 +5,10 @@ $csvFilePath = "C:\Users\administrator\Documents\clean_power.csv"
 $users = Import-Csv $csvFilePath
 foreach ($user in $users) {
     # Set the properties for the new user
-    $username = $user.Username
-    $password = ConvertTo-SecureString $user.Password -AsPlainText -Force
     $firstname = $user.FirstName
     $lastname = $user.LastName
+    $username = $user.Username
+    $password = ConvertTo-SecureString $user.Password -AsPlainText -Force
     $ou = $user.OU
     
     # Create the new user in Active Directory
