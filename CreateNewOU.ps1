@@ -5,10 +5,11 @@
 # https://www.server-world.info/en/note?os=Windows_Server_2019&p=active_directory&f=9
 
 
+# Prompt the user for the OU name
+$ouName = Read-Host "Enter the name for the new OU"
 
-# Prompt the user for the name of the new forest and domain
-$forestName = Read-Host "Enter the name of the new forest"
-$domainName = Read-Host "Enter the name of the new domain"
+# Prompt the user for the domain name
+$domain = Read-Host "Enter the domain for the new OU"
 
-# Create the new forest using the Install-ADDSForest cmdlet
-Install-ADDSForest -DomainName $domainName -DomainNetbiosName ($domainName.Split('.')[0]) -ForestMode WinThreshold -DomainMode WinThreshold -ForestName $forestName
+# Create the new OU
+New-ADOrganizationalUnit -Name $ouName -Path "DC=$domain,DC=com"
