@@ -1,5 +1,5 @@
 # Set the path to the CSV file containing user information
-$csvFilePath = "C:\Users.csv"
+$csvFilePath = "C:\Users\administrator\Documents\clean_power.csv"
 
 # Import the CSV file and loop through each row
 $users = Import-Csv $csvFilePath
