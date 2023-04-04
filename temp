@@ -1,0 +1,15 @@
+Import-Module AcitveDirectory
+$ADUser = Import-(sv C: \Users \Administrator \Documents \CleanPower1.csv -Delimiter ";"
+$password = 1234
+$Domain = "Cleanpower.com"
+Foreach (SUser in SADUser) <
+New-ADUser
+-  SamAccount Suser. username *
+-  Name "$($user.firstname) $($user. lastname)"
+-  Givenname $user.firstname
+-  Surname Suser. lastname
+-   Enabled Strue
+-  Path 'OU-($user.ou) , DC=cleanpower, DC-com'
+-  Title Suser.jobtitle
+-   Email Suser.email
+-   AccountPassword (ConvertTo-SecureString $password -AsPlainText -Force) -ChangePasswordAtLogon $true
