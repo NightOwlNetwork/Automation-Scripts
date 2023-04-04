@@ -1,15 +1,17 @@
-Import-Module AcitveDirectory
-$ADUser = Import-(sv C: \Users \Administrator \Documents \CleanPower1.csv -Delimiter ";"
-$password = 1234
-$Domain = "Cleanpower.com"
-Foreach (SUser in SADUser) <
-New-ADUser
--  SamAccount Suser. username *
--  Name "$($user.firstname) $($user. lastname)"
--  Givenname $user.firstname
--  Surname Suser. lastname
--   Enabled Strue
--  Path 'OU-($user.ou) , DC=cleanpower, DC-com'
--  Title Suser.jobtitle
--   Email Suser.email
--   AccountPassword (ConvertTo-SecureString $password -AsPlainText -Force) -ChangePasswordAtLogon $true
+# Set the path to the CSV file containing user information
+$csvFilePath = "C:\Users.csv"
+
+# Import the CSV file and loop through each row
+$users = Import-Csv $csvFilePath
+foreach ($user in $users) {
+    # Set the properties for the new user
+    $username = $user.Username
+    $password = ConvertTo-SecureString $user.Password -AsPlainText -Force
+    $firstname = $user.FirstName
+    $lastname = $user.LastName
+    $ou = $user.OU
+    
+    # Create the new user in Active Directory
+    New-ADUser -Name $username -UserPrincipalName "$username@yourdomain.com" -SamAccountName $username `
+        -GivenName $firstname -Surname $lastname -AccountPassword $password -Enabled $true -Path $ou
+}
