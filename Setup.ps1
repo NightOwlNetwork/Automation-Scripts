@@ -41,6 +41,10 @@ Install-ADDSForest `
 
 Restart-Computer
 
+# Wait for the computer to come back online
+while (-not (Test-Connection -ComputerName localhost -Count 1 -Quiet)) {
+    Start-Sleep -Seconds 5
+}
 
 # Check if the AD-Domain-Services role is already installed
 $adRole = Get-WindowsFeature -Name AD-Domain-Services
