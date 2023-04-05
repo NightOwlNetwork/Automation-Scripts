@@ -8,6 +8,7 @@ Param (
     [string]$UserPassword
 )
 
+$domain = "cleanpower.com"
 # Filepath
 $Filepath = "C:\Users\Administrator\Documents\Clean-Power.csv"
 
@@ -15,15 +16,16 @@ $pswrd = ConvertTo-SecureString $UserPassword -AsPlainText -Force
 $users = Import-CSV $Filepath
 foreach ($user in $users) {
     $props = @{
-        $User.FirstName + ' ' + $User.LastName
-        DisplayName = $User.LastName + ' ' + $User.FirstName
-        EmailAddress = $User.Username + '@cleanpower.com'
-        Surname = $User.LastName
-        GivenName = $User.FirstName
+        Name = $User.Username       
+        DisplayName = $user.LastName + ' ' + $user.FirstName
+        EmailAddress = $user.Username + '@cleanpower.com'
+        Surname = $user.LastName
+        GivenName = $user.FirstName
         AccountPassword = $pswrd
-        Path = 'OU=' + $User.OU + ',DC=cleanpower,DC=com' # OU path based on CSV file
-        JobTitle = $User.JobTitle # add JobTitle attribute
+        Path = 'OU=' + $user.OU + ',DC=cleanpower,DC=com' # OU path based on CSV file
+        JobTitle = $user.JobTitle # add JobTitle attribute
     }
     New-ADUser @props -PassThru
 }
+
 #end
