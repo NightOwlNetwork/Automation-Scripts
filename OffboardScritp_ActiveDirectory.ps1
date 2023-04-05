@@ -4,9 +4,10 @@
 # 3 April 2023
 
 # This code can be ran upon termination of an employee. 
+Import-Module Active Directory
 
 # Retrieve the user
-
+$SamAccountName = Read-Host "Enter username of user you wish to delete"
 Get-ADUser $SamAccountName
 
 # Prompt to delete the user
