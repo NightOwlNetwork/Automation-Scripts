@@ -53,8 +53,8 @@ Install-ADDSForest `
 Restart-Computer
 
 # Wait for the computer to come back online
-while (-not (Test-Connection -ComputerName localhost -Count 1 -Quiet)) {
-    Start-Sleep -Seconds 5
+while (-not (Test-Connection -ComputerName localhost -Count 30 -Quiet)) {
+    Start-Sleep -Seconds 10
 }
 
 # Prompt the user for the name of the new forest and domain
