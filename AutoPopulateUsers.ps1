@@ -3,29 +3,23 @@
 #https://social.technet.microsoft.com/Forums/ie/en-US/50bfd4e1-b856-490b-8dba-c4219e0f1b0f/newaduser-the-server-is-unwilling-to-process-the-request?forum=ITCG
 # 03Apir23
 
-Param (
-    [parameter(mandatory=$true)]
-    [string]$UserPassword
-)
+Add-WindowsCapability -Name Rsat.ActiveDirectory.DS-LDS.tool~~~~0.0.1.0 -Online
 
-$domain = "cleanpower.com"
-# Filepath
-$Filepath = "C:\Users\Administrator\Documents\Clean-Power.csv"
+Import-Module ActiveDirectory
 
-$pswrd = ConvertTo-SecureString $UserPassword -AsPlainText -Force
-$users = Import-CSV $Filepath
-foreach ($user in $users) {
-    $props = @{
-        Name = $User.Username       
-        DisplayName = $user.LastName + ' ' + $user.FirstName
-        EmailAddress = $user.Username + '@cleanpower.com'
-        Surname = $user.LastName
-        GivenName = $user.FirstName
-        AccountPassword = $pswrd
-        Path = 'OU=' + $user.OU + ',DC=cleanpower,DC=com' # OU path based on CSV file
-        JobTitle = $user.JobTitle # add JobTitle attribute
-    }
-    New-ADUser @props -PassThru
+$ADUser = Import-Csv "C:\Users\Administrator\Documents\CP.csv"
+$password = 1234
+
+
+Foreach ($User in $ADUser) {
+    New-ADUser `
+        -Name "$($user.firstname)  $($user.lastname)" `
+        -Givenname $user.firstname `
+        -Surname $user.lastname `
+        -Enabled $true `
+        -Path 'OU=$($user.OU),DC=cleanpower,DC=com' `
+        -Title $user.jobtitle `
+        -Email $user.email `
+        -AccountPassword (ConvertTo-SecureString $password -AsPlaintext -Force)
 }
-
 #end
