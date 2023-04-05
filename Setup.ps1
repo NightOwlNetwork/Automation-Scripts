@@ -6,13 +6,11 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
 
 # Assigns the Window Server VM a static IPv4 Address 
 # Write-Host $adapter.name
-$newip = Read-Host "What is the new IPv4 Address?"
-Get-NetAdapter -name ethernet | New-NetIPAddress $newip #-DefaultGateway 192.168.1.1 -PrefixLength 24
+Get-NetAdapter -name ethernet | New-NetIPAddress 192.168.1.11 #-DefaultGateway 192.168.1.1 -PrefixLength 24
 (Get-NetAdapter -Name ethernet | Get-NetIPAddress).IPv4Address
 
 # Assigns the Window Server VM a static DNS
-Set-DnsClientServerAddress -InterfaceIndex 6 -ServerAddresses
-192.168.1.11,127.0.0.11
+Set-DnsClientServerAddress -InterfaceIndex 6 -ServerAddresses 192.168.1.11,127.0.0.11
 Get-DnsClientServerAddress
 
 # Renames the Windows Server VM
@@ -22,29 +20,6 @@ ipconfig /all
 
 
 Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
-
-# Promote the server to a Domain Controller
-
-Install-ADDSForest `
-    -DomainName "cleanpower.com" `
-    -DomainNetbiosName "cleanpower" `
-    -ForestMode "cleanpower.com" `
-    -DomainMode "cleanpower.com" `
-    -InstallDns:$true `
-    -NoRebootOnCompletion:$false `
-    -CreateDnsDelegation:$false `
-    -DatabasePath "C:\Windows\NTDS" `
-    -LogPath "C:\Windows\NTDS" `
-    -SysvolPath "C:\Windows\SYSVOL"
-
-# Restart the server to complete the installation
-
-Restart-Computer
-
-# Wait for the computer to come back online
-while (-not (Test-Connection -ComputerName localhost -Count 1 -Quiet)) {
-    Start-Sleep -Seconds 5
-}
 
 # Check if the AD-Domain-Services role is already installed
 $adRole = Get-WindowsFeature -Name AD-Domain-Services
@@ -57,6 +32,29 @@ if ($adRole.Installed -ne "True") {
 
 } else {
     Write-Output "AD-Domain-Services role is already installed."
+}
+# Promote the server to a Domain Controller
+
+Install-ADDSForest `
+    -DomainName "cleanpower.com" `
+    -DomainNetbiosName "CLEANPOWER" `
+    -ForestMode "Default" `
+    -DomainMode "Default" `
+    -InstallDns:$true `
+    -NoRebootOnCompletion:$false `
+    -CreateDnsDelegation:$false `
+    -DatabasePath "C:\Windows\NTDS" `
+    -LogPath "C:\Windows\NTDS" `
+    -SysvolPath "C:\Windows\SYSVOL"
+
+
+
+# Restart the server to complete the installation
+Restart-Computer
+
+# Wait for the computer to come back online
+while (-not (Test-Connection -ComputerName localhost -Count 1 -Quiet)) {
+    Start-Sleep -Seconds 5
 }
 
 # Prompt the user for the name of the new forest and domain
