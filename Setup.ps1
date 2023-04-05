@@ -52,24 +52,38 @@ $domain = Read-Host "Enter the domain for the new OU"
 # Create the new OU
 New-ADOrganizationalUnit -Name $ouName -Path "DC=$domain,DC=com"
 
-#Installs tools
+#Installs Tools
 Add-WindowsCapability -Name Rsat.ActiveDirectory.DS-LDS.tool~~~~0.0.1.0 -Online
 
 Import-Module ActiveDirectory
 
-#Finds CSV file
+#Finds CSV File
 $ADUser = Import-Csv "C:\Users\Administrator\Documents\CP.csv"
 
-# For each, reads each line as a new user
-Foreach ($User in $ADUser) {
+foreach ($User in $ADUser) {
+    # Check if user already exists
+    $existingUser = Get-ADUser -Filter "GivenName -eq '$($user.firstname)' -and Surname -eq '$($user.lastname)'" -ErrorAction SilentlyContinue
+    if ($existingUser) {
+        Write-Warning "User $($user.firstname) $($user.lastname) already exists in Active Directory."
+        continue
+    }
+
+    # Create new user account
     New-ADUser `
-        -Name "$($user.firstname)  $($user.lastname)" `
-        -Givenname $user.firstname `
+        -Name "$($user.firstname) $($user.lastname)" `
+        -GivenName $user.firstname `
         -Surname $user.lastname `
         -Enabled $true `
-        -Path 'OU=$($user.OU),DC=cleanpower,DC=com' `
+        -Path "OU=$($user.OU),DC=cleanpower,DC=com" `
         -Title $user.jobtitle `
         -Email $user.email `
-        -AccountPassword (ConvertTo-SecureString $user.password -AsPlaintext -Force)
+        -AccountPassword (ConvertTo-SecureString $user.password -AsPlainText -Force)
+
+$AccountEnabled = Get-ADUser -Identity $($User.username) -Properties Enabled | Select-Object -ExpandProperty Enabled
+    if (!$AccountEnabled) {
+        Enable-ADAccount -Identity $($User.username)
+        Write-Host "Enabled user $($User.username)"
+} else {
+    Write-Host "User $($User.username) is already enabled"
+    }
 }
-echo "New Users Added"
