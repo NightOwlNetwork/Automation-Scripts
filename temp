@@ -1,0 +1,17 @@
+# Set the path to the CSV file containing user information
+$csvFilePath = "C:\Users\administrator\Documents\clean_power.csv"
+
+# Import the CSV file and loop through each row
+$users = Import-Csv $csvFilePath
+foreach ($user in $users) {
+    # Set the properties for the new user
+    $firstname = $user.FirstName
+    $lastname = $user.LastName
+    $username = $user.Username
+    $password = ConvertTo-SecureString $user.Password -AsPlainText -Force
+    $ou = $user.OU
+    
+    # Create the new user in Active Directory
+    New-ADUser -Name $username -UserPrincipalName "$username@yourdomain.com" -SamAccountName $username `
+        -GivenName $firstname -Surname $lastname -AccountPassword $password -Enabled $true -Path $ou
+}
