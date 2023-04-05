@@ -70,9 +70,6 @@ Install-ADDSForest -DomainName $domainName -DomainNetbiosName ($domainName.Split
 # Prompt the user for the OU name
 $ouName = Read-Host "Enter the name for the new OU"
 
-# Prompt the user for the domain name
-$domain = Read-Host "Enter the domain for the new OU"
-
 # Create the new OU
 New-ADOrganizationalUnit -Name $ouName -Path "DC=$domain,DC=com"
 
