@@ -29,4 +29,12 @@ foreach ($User in $ADUser) {
         -Title $user.jobtitle `
         -Email $user.email `
         -AccountPassword (ConvertTo-SecureString $user.password -AsPlainText -Force)
+
+$AccountEnabled = Get-ADUser -Identity $($User.username) -Properties Enabled | Select-Object -ExpandProperty Enabled
+    if (!$AccountEnabled) {
+        Enable-ADAccount -Identity $($User.username)
+        Write-Host "Enabled user $($User.username)"
+} else {
+    Write-Host "User $($User.username) is already enabled"
+    }
 }
