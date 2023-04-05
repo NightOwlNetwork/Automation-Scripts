@@ -8,8 +8,6 @@ Add-WindowsCapability -Name Rsat.ActiveDirectory.DS-LDS.tool~~~~0.0.1.0 -Online
 Import-Module ActiveDirectory
 
 $ADUser = Import-Csv "C:\Users\Administrator\Documents\CP.csv"
-$password = 1234
-
 
 Foreach ($User in $ADUser) {
     New-ADUser `
@@ -20,6 +18,7 @@ Foreach ($User in $ADUser) {
         -Path 'OU=$($user.OU),DC=cleanpower,DC=com' `
         -Title $user.jobtitle `
         -Email $user.email `
-        -AccountPassword (ConvertTo-SecureString $password -AsPlaintext -Force)
+        -AccountPassword (ConvertTo-SecureString $user.password -AsPlaintext -Force)
 }
+echo "New Users Added"
 #end
