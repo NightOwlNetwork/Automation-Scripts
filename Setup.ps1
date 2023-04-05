@@ -1,8 +1,6 @@
 # Nick, Sierra, Connie, Geneva
 # Start from blank server script
 
-
-
 # Set Execution Policy to allow script execution
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
 
@@ -21,6 +19,28 @@ Get-DnsClientServerAddress
 Rename-Computer -NewName "Server044" -DomainCredential
 CORP\administrator -Restart
 ipconfig /all
+
+
+Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+
+# Promote the server to a Domain Controller
+
+Install-ADDSForest `
+    -DomainName "cleanpower.com" `
+    -DomainNetbiosName "cleanpower" `
+    -ForestMode "cleanpower.com" `
+    -DomainMode "cleanpower.com" `
+    -InstallDns:$true `
+    -NoRebootOnCompletion:$false `
+    -CreateDnsDelegation:$false `
+    -DatabasePath "C:\Windows\NTDS" `
+    -LogPath "C:\Windows\NTDS" `
+    -SysvolPath "C:\Windows\SYSVOL"
+
+# Restart the server to complete the installation
+
+Restart-Computer
+
 
 # Check if the AD-Domain-Services role is already installed
 $adRole = Get-WindowsFeature -Name AD-Domain-Services
