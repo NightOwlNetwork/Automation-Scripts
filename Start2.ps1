@@ -4,7 +4,7 @@ Add-WindowsCapability -Name Rsat.ActiveDirectory.DS-LDS.tool~~~~0.0.1.0 -Online
 
 Import-Module ActiveDirectory
 # Prompt the user for the OU name
-$ouNames = "Executive", "Engineering", "Project Management", "Sales & Marketing", "Customer Successs", "Operations", "Reseach & Delevoplment"
+$ouNames = "Executive", "Engineering", "Project Management", "Sales", "Customer Successs", "Operations", "Reseach"
 $domainDN = "DC=cleanpower,DC=com"
 # Create the new OU
 foreach ($ouName in $ouNames) {
