@@ -1,6 +1,6 @@
 
 # Prompt the user for the OU name
-$ouName = Read-Host "Enter the name for the new OU"
+$ouName = "Executive", "Engineering", "Project Management", "Sales & Marketing", "Customer Successs", "Operations", "Reseach & Delevoplment"
 $domainDN = "DC=cleanpower,DC=com"
 # Create the new OU
 New-ADOrganizationalUnit -Name $ouName -Path $domainDN
