@@ -1,14 +1,15 @@
 
-# Prompt the user for the OU name
-$ouName = "Executive", "Engineering", "Project Management", "Sales & Marketing", "Customer Successs", "Operations", "Reseach & Delevoplment"
-$domainDN = "DC=cleanpower,DC=com"
-# Create the new OU
-New-ADOrganizationalUnit -Name $ouName -Path $domainDN
-
 #Installs Tools
 Add-WindowsCapability -Name Rsat.ActiveDirectory.DS-LDS.tool~~~~0.0.1.0 -Online
 
 Import-Module ActiveDirectory
+# Prompt the user for the OU name
+$ouName = "Executive", "Engineering", "Project Management", "Sales & Marketing", "Customer Successs", "Operations", "Reseach & Delevoplment"
+$domainDN = "DC=cleanpower,DC=com"
+# Create the new OU
+foreach ($ouName in $ouNames) {
+    New-ADOrganizationalUnit -Name $ouName -Path $domainDN
+}
 
 #Finds CSV File
 $ADUser = Import-Csv "C:\Users\Administrator\Documents\CP.csv"
