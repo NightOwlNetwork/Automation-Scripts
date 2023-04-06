@@ -41,3 +41,5 @@ $AccountEnabled = Get-ADUser -Identity $($User.username) -Properties Enabled | S
     Write-Host "User $($User.username) is already enabled"
     }
 }
+
+Write-Host "Welcome to Cleanpower!"
