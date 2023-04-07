@@ -3,7 +3,7 @@
 # Date of lates revision: 04 Apr 2023
 # Purpose: AD Powershell Scripting
 # Reference: https://woshub.com/powershell-configure-windows-networking/
-# Reference: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/rename-computer?view=powershell-7.3
+
 
 
 # MAIN
@@ -18,10 +18,5 @@ Get-NetAdapter -name ethernet | New-NetIPAddress $newip #-DefaultGateway 192.168
 Set-DnsClientServerAddress -InterfaceIndex 6 -ServerAddresses
 192.168.1.11,127.0.0.11
 Get-DnsClientServerAddress
-
-# Renames the Windows Server VM
-Rename-Computer -NewName "Server044" -DomainCredential
-CORP\administrator -Restart
-ipconfig /all
 
 #END
